@@ -5,26 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cousinbande</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
 
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
+
 body{
     font-family:'Inter',sans-serif;
-    background:radial-gradient(circle at top,#1e293b,#0f172a 70%);
-    color:#f1f5f9;
+    background:#4CBB17; /* Kelly Green */
+    color:white;
 }
+
+/* HEADER */
 header{
-    padding:60px 20px 40px;
+    padding:50px 20px 30px;
     text-align:center;
     position:relative;
 }
+
 header h1{
-    font-size:3.5rem;
+    font-size:3.2rem;
     font-weight:700;
-    background:linear-gradient(to right,#818cf8,#c084fc);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
+    color:white;
 }
 
 /* FLAGGEN */
@@ -36,7 +38,7 @@ header h1{
     gap:10px;
 }
 .flags img{
-    width:32px;
+    width:34px;
     height:22px;
     cursor:pointer;
     border-radius:4px;
@@ -46,73 +48,91 @@ header h1{
     transform:scale(1.1);
 }
 
-/* Header Info */
+/* HEADER INFO */
 .badge{
-    margin-top:20px;
-    display:inline-block;
-    padding:12px 25px;
-    border-radius:50px;
-    background:rgba(255,255,255,0.1);
-    backdrop-filter:blur(15px);
+    margin-top:15px;
+    font-weight:600;
 }
-.countdown{margin-top:20px;font-weight:600;}
-.deadline{margin-top:10px;color:#fbbf24;}
-.deadline.warning{color:#ef4444;font-weight:700;}
+.countdown{margin-top:10px;}
+.deadline{margin-top:5px;color:#ffe066;}
+.deadline.warning{color:#ff4444;font-weight:700;}
 
+/* CONTAINER */
 .container{
     max-width:1000px;
-    margin:40px auto;
+    margin:30px auto;
     padding:0 20px;
 }
-.card{
-    background:rgba(255,255,255,0.05);
-    backdrop-filter:blur(25px);
-    padding:40px;
-    border-radius:25px;
-    box-shadow:0 20px 50px rgba(0,0,0,0.4);
-}
-.content-card{display:none;margin-top:40px;}
 
+/* CARD */
+.card{
+    background:rgba(255,255,255,0.15);
+    padding:30px;
+    border-radius:18px;
+    margin-bottom:30px;
+}
+
+/* LOGIN */
 input{
     width:100%;
-    padding:12px;
-    border-radius:12px;
+    padding:10px;
+    border-radius:8px;
     border:none;
-    margin:10px 0;
+    margin:8px 0;
 }
-button.primary{
-    padding:10px 25px;
+button{
+    padding:10px 20px;
     border:none;
-    border-radius:12px;
+    border-radius:8px;
     background:white;
-    color:#4f46e5;
+    color:#4CBB17;
     font-weight:600;
     cursor:pointer;
 }
-footer{
-    text-align:center;
-    padding:40px;
-    color:#64748b;
+
+/* TABS */
+.tabs{
+    display:flex;
+    overflow-x:auto;
+    gap:10px;
+    margin-bottom:20px;
 }
+.tab{
+    padding:10px 18px;
+    background:rgba(255,255,255,0.25);
+    border-radius:20px;
+    cursor:pointer;
+    white-space:nowrap;
+}
+.tab.active{
+    background:white;
+    color:#4CBB17;
+    font-weight:600;
+}
+
+.tab-content{
+    display:none;
+}
+.tab-content.active{
+    display:block;
+}
+
 </style>
 </head>
-
 <body>
 
 <header>
-
 <div class="flags">
-<img src="https://flagcdn.com/w40/de.png" onclick="setLanguage('de')" title="Deutsch">
-<img src="https://flagcdn.com/w40/us.png" onclick="setLanguage('en')" title="English">
+<img src="https://flagcdn.com/w40/de.png" onclick="setLang('de')">
+<img src="https://flagcdn.com/w40/us.png" onclick="setLang('en')">
 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_the_Soviet_Union.svg/40px-Flag_of_the_Soviet_Union.svg.png"
-onclick="setLanguage('ru')" title="Русский">
+onclick="setLang('ru')">
 </div>
 
 <h1>Cousinbande</h1>
-<div class="badge" id="eventDate"></div>
+<div class="badge" id="eventText"></div>
 <div class="countdown" id="countdown"></div>
-<div class="deadline" id="deadlineNotice"></div>
-
+<div class="deadline" id="deadline"></div>
 </header>
 
 <div class="container">
@@ -121,36 +141,44 @@ onclick="setLanguage('ru')" title="Русский">
 <h2 id="loginTitle"></h2>
 <input type="text" id="username">
 <input type="password" id="password">
-<button class="primary" onclick="checkLogin()" id="loginButton"></button>
-<div id="errorMsg" style="color:#ffcccc;"></div>
+<button onclick="login()" id="loginBtn"></button>
+<div id="error" style="margin-top:8px;color:#ffdddd;"></div>
 </div>
 
-<div class="card content-card" id="contentCard">
+<div id="mainContent" style="display:none;">
+
+<div class="card">
 <h2 id="meetingTitle"></h2>
-<p id="uploadText"></p>
-<input type="file">
 </div>
+
+<div class="card">
+<h3 id="futureMeetingsTitle"></h3>
+
+<div class="tabs" id="tabs"></div>
+
+<div id="tabContents"></div>
 
 </div>
 
-<footer>© 2026 Cousinbande</footer>
+</div>
+</div>
 
 <script>
 
 // ===== SPRACHEN =====
-let currentLang="de";
+let lang="de";
 
-const translations={
+const t={
 de:{
 login:"Login",
 username:"Benutzername",
 password:"Passwort",
-loginButton:"Einloggen",
-meeting:"Letztes Treffen",
-upload:"Fotos & Erinnerungen 📸",
+btn:"Einloggen",
 wrong:"Falsche Zugangsdaten!",
+meeting:"Letztes Treffen",
+future:"Weitere Treffen",
 next:"Nächstes Treffen:",
-countdown:"Noch",
+remaining:"Noch",
 deadlineBefore:"Bitte spätestens 7 Tage vorher zusagen.",
 deadlineAfter:"⚠️ Zusagefrist erreicht!"
 },
@@ -158,12 +186,12 @@ en:{
 login:"Login",
 username:"Username",
 password:"Password",
-loginButton:"Login",
-meeting:"Last Meeting",
-upload:"Photos & Memories 📸",
+btn:"Login",
 wrong:"Wrong credentials!",
+meeting:"Last Meeting",
+future:"Upcoming Meetings",
 next:"Next Meeting:",
-countdown:"Remaining",
+remaining:"Remaining",
 deadlineBefore:"Please confirm at least 7 days before.",
 deadlineAfter:"⚠️ Confirmation deadline reached!"
 },
@@ -171,113 +199,123 @@ ru:{
 login:"Вход",
 username:"Имя пользователя",
 password:"Пароль",
-loginButton:"Войти",
-meeting:"Последняя встреча",
-upload:"Фотографии и воспоминания 📸",
+btn:"Войти",
 wrong:"Неверные данные!",
+meeting:"Последняя встреча",
+future:"Будущие встречи",
 next:"Следующая встреча:",
-countdown:"Осталось",
+remaining:"Осталось",
 deadlineBefore:"Подтвердите участие минимум за 7 дней.",
 deadlineAfter:"⚠️ Срок подтверждения истёк!"
 }
 };
 
-function setLanguage(lang){
-currentLang=lang;
-applyLanguage();
-updateCountdown();
-updateEventText();
+function setLang(l){
+lang=l;
+applyLang();
+updateHeader();
 }
 
-function applyLanguage(){
-const t=translations[currentLang];
-document.getElementById("loginTitle").innerText=t.login;
-document.getElementById("username").placeholder=t.username;
-document.getElementById("password").placeholder=t.password;
-document.getElementById("loginButton").innerText=t.loginButton;
-document.getElementById("meetingTitle").innerText=t.meeting;
-document.getElementById("uploadText").innerText=t.upload;
+function applyLang(){
+document.getElementById("loginTitle").innerText=t[lang].login;
+document.getElementById("username").placeholder=t[lang].username;
+document.getElementById("password").placeholder=t[lang].password;
+document.getElementById("loginBtn").innerText=t[lang].btn;
+document.getElementById("meetingTitle").innerText=t[lang].meeting;
+document.getElementById("futureMeetingsTitle").innerText=t[lang].future;
 }
 
-applyLanguage();
+applyLang();
 
 // ===== LOGIN test/test =====
-function checkLogin(){
-if(document.getElementById("username").value==="test" &&
-document.getElementById("password").value==="test"){
-document.getElementById("loginCard").style.display="none";
-document.getElementById("contentCard").style.display="block";
+function login(){
+if(username.value==="test" && password.value==="test"){
+loginCard.style.display="none";
+mainContent.style.display="block";
 }else{
-document.getElementById("errorMsg").innerText=
-translations[currentLang].wrong;
+error.innerText=t[lang].wrong;
 }
 }
 
 // ===== TERMIN-SERIE =====
-function getNthSaturday(year,month,n){
-let date=new Date(year,month,1);
-let count=0;
-while(date.getMonth()===month){
-if(date.getDay()===6){
-count++;
-if(count===n)return new Date(date.setHours(18,0,0));
-}
-date.setDate(date.getDate()+1);
+function nthSaturday(year,month,n){
+let d=new Date(year,month,1),c=0;
+while(d.getMonth()===month){
+if(d.getDay()===6){c++; if(c===n)return new Date(d.setHours(18,0,0));}
+d.setDate(d.getDate()+1);
 }
 }
 
-function getNextEvent(){
-const now=new Date();
-const year=now.getFullYear();
-const may=getNthSaturday(year,4,2);
-const dec=getNthSaturday(year,11,1);
-if(now<may)return may;
-if(now<dec)return dec;
-return getNthSaturday(year+1,4,2);
+function nextEvents(count=6){
+let events=[];
+let year=new Date().getFullYear();
+while(events.length<count){
+events.push(nthSaturday(year,4,2));
+events.push(nthSaturday(year,11,1));
+year++;
+}
+return events.filter(e=>e>new Date());
 }
 
-const eventDate=getNextEvent();
-const deadlineDate=new Date(eventDate.getTime()-7*24*60*60*1000);
+const events=nextEvents(6);
+const nextEvent=events[0];
+const deadline=new Date(nextEvent.getTime()-7*24*60*60*1000);
 
-function updateEventText(){
-document.getElementById("eventDate").innerHTML=
-translations[currentLang].next+" "+
-eventDate.toLocaleDateString(
-currentLang==="de"?"de-DE":
-currentLang==="ru"?"ru-RU":"en-US",
-{weekday:"long",day:"numeric",month:"long",year:"numeric"}
-);
+function updateHeader(){
+document.getElementById("eventText").innerHTML=
+t[lang].next+" "+
+nextEvent.toLocaleDateString(
+lang==="de"?"de-DE":lang==="ru"?"ru-RU":"en-US",
+{weekday:"long",day:"numeric",month:"long",year:"numeric"});
 }
 
-updateEventText();
+updateHeader();
 
 // ===== COUNTDOWN =====
 function updateCountdown(){
-const now=new Date().getTime();
-const distance=eventDate-now;
-if(distance<=0){
-document.getElementById("countdown").innerHTML="🎉";
-return;
-}
-const days=Math.floor(distance/(1000*60*60*24));
-const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
-
+let now=new Date();
+let diff=nextEvent-now;
+if(diff<=0)return;
+let days=Math.floor(diff/(1000*60*60*24));
 document.getElementById("countdown").innerHTML=
-`⏳ ${translations[currentLang].countdown} ${days}d ${hours}h`;
+"⏳ "+t[lang].remaining+" "+days+" d";
 
-if(now>=deadlineDate){
-document.getElementById("deadlineNotice").innerHTML=
-translations[currentLang].deadlineAfter;
+if(now>=deadline){
+document.getElementById("deadline").innerHTML=t[lang].deadlineAfter;
+document.getElementById("deadline").classList.add("warning");
 }else{
-document.getElementById("deadlineNotice").innerHTML=
-translations[currentLang].deadlineBefore;
+document.getElementById("deadline").innerHTML=t[lang].deadlineBefore;
 }
 }
-
 setInterval(updateCountdown,1000);
 updateCountdown();
 
-</script>
+// ===== TABS =====
+const tabsDiv=document.getElementById("tabs");
+const contentsDiv=document.getElementById("tabContents");
 
+events.slice(0,6).forEach((e,i)=>{
+let tab=document.createElement("div");
+tab.className="tab"+(i===0?" active":"");
+tab.innerText=e.toLocaleDateString("de-DE");
+tab.onclick=()=>activateTab(i);
+tabsDiv.appendChild(tab);
+
+let content=document.createElement("div");
+content.className="tab-content"+(i===0?" active":"");
+content.innerHTML="<p>"+e.toLocaleDateString()+"</p>";
+contentsDiv.appendChild(content);
+});
+
+function activateTab(i){
+document.querySelectorAll(".tab").forEach((t,idx)=>{
+t.classList.toggle("active",idx===i);
+});
+document.querySelectorAll(".tab-content").forEach((c,idx)=>{
+c.classList.toggle("active",idx===i);
+});
+}
+
+</script>
 </body>
 </html>
