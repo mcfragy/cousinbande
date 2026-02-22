@@ -5,116 +5,154 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cousinbande</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
 <style>
+:root{
+  --green:#004C54;
+  --black:#000000;
+  --white:#FFFFFF;
+  --silver:#A5ACAF;
+}
+
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
-    font-family:'Inter',sans-serif;
-    background:#4CBB17; /* Kelly Green */
-    color:white;
+  font-family:'Inter',sans-serif;
+  background:var(--green);
+  color:var(--white);
 }
 
-/* HEADER */
+/* ===== HEADER ===== */
 header{
-    padding:50px 20px 30px;
-    text-align:center;
-    position:relative;
+  background:linear-gradient(135deg,var(--green),var(--black));
+  padding:60px 20px 40px;
+  text-align:center;
+  position:relative;
+  border-bottom:4px solid var(--silver);
 }
 
 header h1{
-    font-size:3.2rem;
-    font-weight:700;
-    color:white;
+  font-size:3.2rem;
+  font-weight:800;
+  letter-spacing:2px;
+  color:var(--white);
 }
 
-/* FLAGGEN */
+/* ===== FLAGS ===== */
 .flags{
-    position:absolute;
-    top:20px;
-    right:20px;
-    display:flex;
-    gap:10px;
+  position:absolute;
+  top:20px;
+  right:20px;
+  display:flex;
+  gap:12px;
 }
 .flags img{
-    width:34px;
-    height:22px;
-    cursor:pointer;
-    border-radius:4px;
-    transition:0.2s;
+  width:36px;
+  height:24px;
+  cursor:pointer;
+  border:2px solid var(--silver);
+  border-radius:4px;
+  transition:0.2s;
 }
 .flags img:hover{
-    transform:scale(1.1);
+  transform:scale(1.1);
+  border-color:var(--white);
 }
 
-/* HEADER INFO */
+/* ===== HEADER INFO ===== */
 .badge{
-    margin-top:15px;
-    font-weight:600;
+  margin-top:15px;
+  font-weight:600;
+  color:var(--silver);
 }
-.countdown{margin-top:10px;}
-.deadline{margin-top:5px;color:#ffe066;}
-.deadline.warning{color:#ff4444;font-weight:700;}
+.countdown{
+  margin-top:10px;
+  font-weight:700;
+}
+.deadline{
+  margin-top:6px;
+  color:#FFD700;
+}
+.deadline.warning{
+  color:#FF4444;
+}
 
-/* CONTAINER */
+/* ===== CONTAINER ===== */
 .container{
-    max-width:1000px;
-    margin:30px auto;
-    padding:0 20px;
+  max-width:1000px;
+  margin:40px auto;
+  padding:0 20px;
 }
 
-/* CARD */
+/* ===== CARDS ===== */
 .card{
-    background:rgba(255,255,255,0.15);
-    padding:30px;
-    border-radius:18px;
-    margin-bottom:30px;
+  background:var(--black);
+  border:2px solid var(--silver);
+  border-radius:12px;
+  padding:30px;
+  margin-bottom:30px;
 }
 
-/* LOGIN */
+/* ===== LOGIN ===== */
 input{
-    width:100%;
-    padding:10px;
-    border-radius:8px;
-    border:none;
-    margin:8px 0;
+  width:100%;
+  padding:12px;
+  border-radius:6px;
+  border:1px solid var(--silver);
+  margin:10px 0;
+  background:#111;
+  color:white;
 }
 button{
-    padding:10px 20px;
-    border:none;
-    border-radius:8px;
-    background:white;
-    color:#4CBB17;
-    font-weight:600;
-    cursor:pointer;
+  padding:10px 20px;
+  border:none;
+  border-radius:6px;
+  background:var(--silver);
+  color:var(--black);
+  font-weight:700;
+  cursor:pointer;
+  transition:0.2s;
+}
+button:hover{
+  background:white;
 }
 
-/* TABS */
+/* ===== TABS ===== */
 .tabs{
-    display:flex;
-    overflow-x:auto;
-    gap:10px;
-    margin-bottom:20px;
+  display:flex;
+  overflow-x:auto;
+  gap:10px;
+  margin-bottom:20px;
 }
+
 .tab{
-    padding:10px 18px;
-    background:rgba(255,255,255,0.25);
-    border-radius:20px;
-    cursor:pointer;
-    white-space:nowrap;
+  padding:10px 18px;
+  background:var(--green);
+  border:2px solid var(--silver);
+  border-radius:6px;
+  cursor:pointer;
+  white-space:nowrap;
+  font-weight:600;
 }
 .tab.active{
-    background:white;
-    color:#4CBB17;
-    font-weight:600;
+  background:var(--silver);
+  color:var(--black);
 }
 
 .tab-content{
-    display:none;
+  display:none;
 }
 .tab-content.active{
-    display:block;
+  display:block;
+}
+
+/* ===== FOOTER ===== */
+footer{
+  text-align:center;
+  padding:30px;
+  color:var(--silver);
+  border-top:2px solid var(--silver);
 }
 
 </style>
@@ -129,7 +167,7 @@ button{
 onclick="setLang('ru')">
 </div>
 
-<h1>Cousinbande</h1>
+<h1>COUSINBANDE</h1>
 <div class="badge" id="eventText"></div>
 <div class="countdown" id="countdown"></div>
 <div class="deadline" id="deadline"></div>
@@ -142,7 +180,7 @@ onclick="setLang('ru')">
 <input type="text" id="username">
 <input type="password" id="password">
 <button onclick="login()" id="loginBtn"></button>
-<div id="error" style="margin-top:8px;color:#ffdddd;"></div>
+<div id="error" style="margin-top:8px;color:#ff6666;"></div>
 </div>
 
 <div id="mainContent" style="display:none;">
@@ -152,23 +190,22 @@ onclick="setLang('ru')">
 </div>
 
 <div class="card">
-<h3 id="futureMeetingsTitle"></h3>
-
+<h3 id="futureTitle"></h3>
 <div class="tabs" id="tabs"></div>
-
 <div id="tabContents"></div>
-
 </div>
 
 </div>
 </div>
+
+<footer>© 2026 Cousinbande</footer>
 
 <script>
 
-// ===== SPRACHEN =====
+/* ===== SPRACHEN ===== */
 let lang="de";
 
-const t={
+const text={
 de:{
 login:"Login",
 username:"Benutzername",
@@ -217,38 +254,37 @@ updateHeader();
 }
 
 function applyLang(){
-document.getElementById("loginTitle").innerText=t[lang].login;
-document.getElementById("username").placeholder=t[lang].username;
-document.getElementById("password").placeholder=t[lang].password;
-document.getElementById("loginBtn").innerText=t[lang].btn;
-document.getElementById("meetingTitle").innerText=t[lang].meeting;
-document.getElementById("futureMeetingsTitle").innerText=t[lang].future;
+document.getElementById("loginTitle").innerText=text[lang].login;
+document.getElementById("username").placeholder=text[lang].username;
+document.getElementById("password").placeholder=text[lang].password;
+document.getElementById("loginBtn").innerText=text[lang].btn;
+document.getElementById("meetingTitle").innerText=text[lang].meeting;
+document.getElementById("futureTitle").innerText=text[lang].future;
 }
 
 applyLang();
 
-// ===== LOGIN test/test =====
+/* ===== LOGIN test/test ===== */
 function login(){
 if(username.value==="test" && password.value==="test"){
 loginCard.style.display="none";
 mainContent.style.display="block";
 }else{
-error.innerText=t[lang].wrong;
+error.innerText=text[lang].wrong;
 }
 }
 
-// ===== TERMIN-SERIE =====
+/* ===== TERMIN-SERIE ===== */
 function nthSaturday(year,month,n){
 let d=new Date(year,month,1),c=0;
 while(d.getMonth()===month){
-if(d.getDay()===6){c++; if(c===n)return new Date(d.setHours(18,0,0));}
+if(d.getDay()===6){c++;if(c===n)return new Date(d.setHours(18,0,0));}
 d.setDate(d.getDate()+1);
 }
 }
 
 function nextEvents(count=6){
-let events=[];
-let year=new Date().getFullYear();
+let events=[],year=new Date().getFullYear();
 while(events.length<count){
 events.push(nthSaturday(year,4,2));
 events.push(nthSaturday(year,11,1));
@@ -259,11 +295,11 @@ return events.filter(e=>e>new Date());
 
 const events=nextEvents(6);
 const nextEvent=events[0];
-const deadline=new Date(nextEvent.getTime()-7*24*60*60*1000);
+const deadlineDate=new Date(nextEvent.getTime()-7*24*60*60*1000);
 
 function updateHeader(){
 document.getElementById("eventText").innerHTML=
-t[lang].next+" "+
+text[lang].next+" "+
 nextEvent.toLocaleDateString(
 lang==="de"?"de-DE":lang==="ru"?"ru-RU":"en-US",
 {weekday:"long",day:"numeric",month:"long",year:"numeric"});
@@ -271,43 +307,43 @@ lang==="de"?"de-DE":lang==="ru"?"ru-RU":"en-US",
 
 updateHeader();
 
-// ===== COUNTDOWN =====
+/* ===== COUNTDOWN ===== */
 function updateCountdown(){
 let now=new Date();
 let diff=nextEvent-now;
 if(diff<=0)return;
 let days=Math.floor(diff/(1000*60*60*24));
 document.getElementById("countdown").innerHTML=
-"⏳ "+t[lang].remaining+" "+days+" d";
+"⏳ "+text[lang].remaining+" "+days+" d";
 
-if(now>=deadline){
-document.getElementById("deadline").innerHTML=t[lang].deadlineAfter;
-document.getElementById("deadline").classList.add("warning");
+if(now>=deadlineDate){
+deadline.innerText=text[lang].deadlineAfter;
+deadline.classList.add("warning");
 }else{
-document.getElementById("deadline").innerHTML=t[lang].deadlineBefore;
+deadline.innerText=text[lang].deadlineBefore;
 }
 }
 setInterval(updateCountdown,1000);
 updateCountdown();
 
-// ===== TABS =====
-const tabsDiv=document.getElementById("tabs");
-const contentsDiv=document.getElementById("tabContents");
+/* ===== TABS ===== */
+const tabs=document.getElementById("tabs");
+const contents=document.getElementById("tabContents");
 
 events.slice(0,6).forEach((e,i)=>{
 let tab=document.createElement("div");
 tab.className="tab"+(i===0?" active":"");
 tab.innerText=e.toLocaleDateString("de-DE");
-tab.onclick=()=>activateTab(i);
-tabsDiv.appendChild(tab);
+tab.onclick=()=>activate(i);
+tabs.appendChild(tab);
 
 let content=document.createElement("div");
 content.className="tab-content"+(i===0?" active":"");
 content.innerHTML="<p>"+e.toLocaleDateString()+"</p>";
-contentsDiv.appendChild(content);
+contents.appendChild(content);
 });
 
-function activateTab(i){
+function activate(i){
 document.querySelectorAll(".tab").forEach((t,idx)=>{
 t.classList.toggle("active",idx===i);
 });
