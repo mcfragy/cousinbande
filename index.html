@@ -26,19 +26,27 @@ header h1{
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
-.language-switch{
+
+/* FLAGGEN */
+.flags{
     position:absolute;
     top:20px;
     right:20px;
+    display:flex;
+    gap:10px;
 }
-.language-switch button{
-    background:rgba(255,255,255,0.1);
-    border:none;
-    padding:8px 15px;
-    border-radius:20px;
-    color:white;
+.flags img{
+    width:32px;
+    height:22px;
     cursor:pointer;
+    border-radius:4px;
+    transition:0.2s;
 }
+.flags img:hover{
+    transform:scale(1.1);
+}
+
+/* Header Info */
 .badge{
     margin-top:20px;
     display:inline-block;
@@ -81,20 +89,6 @@ button.primary{
     font-weight:600;
     cursor:pointer;
 }
-.gallery{
-    margin-top:30px;
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
-    gap:20px;
-}
-.gallery img{
-    width:100%;
-    height:200px;
-    object-fit:cover;
-    border-radius:15px;
-}
-.poll-section ul{list-style:none;padding:0;margin-bottom:15px;}
-.poll-section li{margin-bottom:8px;}
 footer{
     text-align:center;
     padding:40px;
@@ -106,71 +100,117 @@ footer{
 <body>
 
 <header>
-<div class="language-switch">
-<button onclick="toggleLanguage()">DE / RU</button>
+
+<div class="flags">
+<img src="https://flagcdn.com/w40/de.png" onclick="setLanguage('de')" title="Deutsch">
+<img src="https://flagcdn.com/w40/us.png" onclick="setLanguage('en')" title="English">
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_the_Soviet_Union.svg/40px-Flag_of_the_Soviet_Union.svg.png"
+onclick="setLanguage('ru')" title="Русский">
 </div>
+
 <h1>Cousinbande</h1>
 <div class="badge" id="eventDate"></div>
 <div class="countdown" id="countdown"></div>
 <div class="deadline" id="deadlineNotice"></div>
+
 </header>
 
 <div class="container">
 
 <div class="card" id="loginCard">
-<h2 id="loginTitle">Login</h2>
-<input type="text" id="username" placeholder="Benutzername">
-<input type="password" id="password" placeholder="Passwort">
-<button class="primary" onclick="checkLogin()">Einloggen</button>
+<h2 id="loginTitle"></h2>
+<input type="text" id="username">
+<input type="password" id="password">
+<button class="primary" onclick="checkLogin()" id="loginButton"></button>
 <div id="errorMsg" style="color:#ffcccc;"></div>
 </div>
 
 <div class="card content-card" id="contentCard">
-
-<h2 id="lastMeetingTitle">Letztes Treffen</h2>
-<p>Fotos & Erinnerungen 📸</p>
-<input type="file" id="photoUpload" multiple>
-<div class="gallery" id="gallery"></div>
-
-<div class="poll-section" style="margin-top:40px;">
-<h3>Abstimmungen</h3>
-
-<p>Wo sollen wir uns treffen?</p>
-<ul>
-<li><label><input type="radio" name="restaurant"> Steakhouse by Ilvi</label></li>
-<li><label><input type="radio" name="restaurant"> Restaurant Dreigang</label></li>
-<li><label><input type="radio" name="restaurant"> Die Alte Schule</label></li>
-<li><label><input type="radio" name="restaurant"> Am Osterfeuer</label></li>
-</ul>
-
-<p>Welche Aktivität?</p>
-<ul>
-<li><label><input type="radio" name="activity"> Bowling</label></li>
-<li><label><input type="radio" name="activity"> Escape Room</label></li>
-<li><label><input type="radio" name="activity"> Spaziergang</label></li>
-<li><label><input type="radio" name="activity"> Brunch</label></li>
-</ul>
-
-<button class="primary">Abstimmen</button>
-
+<h2 id="meetingTitle"></h2>
+<p id="uploadText"></p>
+<input type="file">
 </div>
 
-</div>
 </div>
 
 <footer>© 2026 Cousinbande</footer>
 
 <script>
-// ===== LOGIN (test / test) =====
+
+// ===== SPRACHEN =====
+let currentLang="de";
+
+const translations={
+de:{
+login:"Login",
+username:"Benutzername",
+password:"Passwort",
+loginButton:"Einloggen",
+meeting:"Letztes Treffen",
+upload:"Fotos & Erinnerungen 📸",
+wrong:"Falsche Zugangsdaten!",
+next:"Nächstes Treffen:",
+countdown:"Noch",
+deadlineBefore:"Bitte spätestens 7 Tage vorher zusagen.",
+deadlineAfter:"⚠️ Zusagefrist erreicht!"
+},
+en:{
+login:"Login",
+username:"Username",
+password:"Password",
+loginButton:"Login",
+meeting:"Last Meeting",
+upload:"Photos & Memories 📸",
+wrong:"Wrong credentials!",
+next:"Next Meeting:",
+countdown:"Remaining",
+deadlineBefore:"Please confirm at least 7 days before.",
+deadlineAfter:"⚠️ Confirmation deadline reached!"
+},
+ru:{
+login:"Вход",
+username:"Имя пользователя",
+password:"Пароль",
+loginButton:"Войти",
+meeting:"Последняя встреча",
+upload:"Фотографии и воспоминания 📸",
+wrong:"Неверные данные!",
+next:"Следующая встреча:",
+countdown:"Осталось",
+deadlineBefore:"Подтвердите участие минимум за 7 дней.",
+deadlineAfter:"⚠️ Срок подтверждения истёк!"
+}
+};
+
+function setLanguage(lang){
+currentLang=lang;
+applyLanguage();
+updateCountdown();
+updateEventText();
+}
+
+function applyLanguage(){
+const t=translations[currentLang];
+document.getElementById("loginTitle").innerText=t.login;
+document.getElementById("username").placeholder=t.username;
+document.getElementById("password").placeholder=t.password;
+document.getElementById("loginButton").innerText=t.loginButton;
+document.getElementById("meetingTitle").innerText=t.meeting;
+document.getElementById("uploadText").innerText=t.upload;
+}
+
+applyLanguage();
+
+// ===== LOGIN test/test =====
 function checkLogin(){
-    const user=document.getElementById("username").value;
-    const pass=document.getElementById("password").value;
-    if(user==="test" && pass==="test"){
-        document.getElementById("loginCard").style.display="none";
-        document.getElementById("contentCard").style.display="block";
-    } else {
-        document.getElementById("errorMsg").innerText="Falsche Zugangsdaten!";
-    }
+if(document.getElementById("username").value==="test" &&
+document.getElementById("password").value==="test"){
+document.getElementById("loginCard").style.display="none";
+document.getElementById("contentCard").style.display="block";
+}else{
+document.getElementById("errorMsg").innerText=
+translations[currentLang].wrong;
+}
 }
 
 // ===== TERMIN-SERIE =====
@@ -199,10 +239,17 @@ return getNthSaturday(year+1,4,2);
 const eventDate=getNextEvent();
 const deadlineDate=new Date(eventDate.getTime()-7*24*60*60*1000);
 
+function updateEventText(){
 document.getElementById("eventDate").innerHTML=
-"Nächstes Treffen: "+
-eventDate.toLocaleDateString("de-DE",
-{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+translations[currentLang].next+" "+
+eventDate.toLocaleDateString(
+currentLang==="de"?"de-DE":
+currentLang==="ru"?"ru-RU":"en-US",
+{weekday:"long",day:"numeric",month:"long",year:"numeric"}
+);
+}
+
+updateEventText();
 
 // ===== COUNTDOWN =====
 function updateCountdown(){
@@ -214,30 +261,22 @@ return;
 }
 const days=Math.floor(distance/(1000*60*60*24));
 const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+
 document.getElementById("countdown").innerHTML=
-`⏳ Noch ${days} Tage, ${hours} Stunden`;
+`⏳ ${translations[currentLang].countdown} ${days}d ${hours}h`;
+
 if(now>=deadlineDate){
 document.getElementById("deadlineNotice").innerHTML=
-"⚠️ Zusagefrist erreicht!";
+translations[currentLang].deadlineAfter;
+}else{
+document.getElementById("deadlineNotice").innerHTML=
+translations[currentLang].deadlineBefore;
 }
 }
+
 setInterval(updateCountdown,1000);
 updateCountdown();
 
-// ===== BILDER =====
-document.getElementById("photoUpload")
-.addEventListener("change",function(e){
-const files=e.target.files;
-for(let i=0;i<files.length;i++){
-const reader=new FileReader();
-reader.onload=function(event){
-const img=document.createElement("img");
-img.src=event.target.result;
-document.getElementById("gallery").appendChild(img);
-};
-reader.readAsDataURL(files[i]);
-}
-});
 </script>
 
 </body>
