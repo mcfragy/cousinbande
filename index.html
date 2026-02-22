@@ -5,139 +5,146 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cousinbande</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --green:#004C54;
-  --black:#000000;
-  --white:#FFFFFF;
+  --neon:#00F0A8;
+  --black:#0B0B0B;
+  --dark:#111111;
   --silver:#A5ACAF;
+  --white:#FFFFFF;
 }
 
 *{margin:0;padding:0;box-sizing:border-box;}
 
 body{
   font-family:'Inter',sans-serif;
-  background:var(--green);
+  background:var(--black);
   color:var(--white);
 }
 
 /* ===== HEADER ===== */
 header{
-  background:linear-gradient(135deg,var(--green),var(--black));
+  background:linear-gradient(180deg,var(--green),#001a1d);
   padding:60px 20px 40px;
   text-align:center;
+  border-bottom:4px solid var(--neon);
   position:relative;
-  border-bottom:4px solid var(--silver);
 }
 
 header h1{
-  font-size:3.2rem;
-  font-weight:800;
-  letter-spacing:2px;
-  color:var(--white);
+  font-family:'Oswald',sans-serif;
+  font-size:4rem;
+  letter-spacing:4px;
+  font-weight:700;
+  text-transform:uppercase;
+  color:white;
+  text-shadow:0 0 20px var(--neon);
 }
 
-/* ===== FLAGS ===== */
+/* FLAGS */
 .flags{
   position:absolute;
   top:20px;
   right:20px;
   display:flex;
-  gap:12px;
+  gap:15px;
 }
 .flags img{
-  width:36px;
-  height:24px;
+  width:38px;
+  height:26px;
   cursor:pointer;
   border:2px solid var(--silver);
-  border-radius:4px;
   transition:0.2s;
 }
 .flags img:hover{
-  transform:scale(1.1);
-  border-color:var(--white);
+  transform:scale(1.15);
+  border-color:var(--neon);
 }
 
-/* ===== HEADER INFO ===== */
-.badge{
-  margin-top:15px;
-  font-weight:600;
-  color:var(--silver);
+/* SCOREBOARD STYLE */
+.scoreboard{
+  margin-top:25px;
+  font-family:'Oswald',sans-serif;
+  font-size:1.3rem;
+  letter-spacing:2px;
 }
+
 .countdown{
+  font-size:2rem;
   margin-top:10px;
-  font-weight:700;
+  color:var(--neon);
+  text-shadow:0 0 10px var(--neon);
 }
+
 .deadline{
   margin-top:6px;
   color:#FFD700;
 }
 .deadline.warning{
-  color:#FF4444;
+  color:#FF3333;
+  font-weight:700;
 }
 
-/* ===== CONTAINER ===== */
+/* CONTAINER */
 .container{
-  max-width:1000px;
-  margin:40px auto;
+  max-width:1100px;
+  margin:50px auto;
   padding:0 20px;
 }
 
-/* ===== CARDS ===== */
+/* CARDS */
 .card{
-  background:var(--black);
-  border:2px solid var(--silver);
-  border-radius:12px;
+  background:var(--dark);
+  border:2px solid var(--green);
   padding:30px;
-  margin-bottom:30px;
+  margin-bottom:40px;
+  box-shadow:0 0 25px rgba(0,240,168,0.15);
 }
 
-/* ===== LOGIN ===== */
+/* LOGIN */
 input{
   width:100%;
   padding:12px;
-  border-radius:6px;
-  border:1px solid var(--silver);
-  margin:10px 0;
-  background:#111;
+  background:#000;
+  border:1px solid var(--green);
   color:white;
+  margin:12px 0;
 }
 button{
-  padding:10px 20px;
+  padding:12px 25px;
+  background:var(--neon);
   border:none;
-  border-radius:6px;
-  background:var(--silver);
-  color:var(--black);
   font-weight:700;
   cursor:pointer;
-  transition:0.2s;
+  text-transform:uppercase;
 }
 button:hover{
   background:white;
 }
 
-/* ===== TABS ===== */
+/* TABS */
 .tabs{
   display:flex;
+  gap:15px;
   overflow-x:auto;
-  gap:10px;
-  margin-bottom:20px;
+  margin-bottom:25px;
 }
 
 .tab{
-  padding:10px 18px;
-  background:var(--green);
-  border:2px solid var(--silver);
-  border-radius:6px;
+  padding:12px 20px;
+  border:2px solid var(--green);
   cursor:pointer;
+  font-family:'Oswald',sans-serif;
+  letter-spacing:1px;
   white-space:nowrap;
-  font-weight:600;
 }
 .tab.active{
-  background:var(--silver);
-  color:var(--black);
+  background:var(--neon);
+  color:black;
+  font-weight:700;
 }
 
 .tab-content{
@@ -147,12 +154,12 @@ button:hover{
   display:block;
 }
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 footer{
   text-align:center;
   padding:30px;
+  border-top:2px solid var(--green);
   color:var(--silver);
-  border-top:2px solid var(--silver);
 }
 
 </style>
@@ -168,7 +175,8 @@ onclick="setLang('ru')">
 </div>
 
 <h1>COUSINBANDE</h1>
-<div class="badge" id="eventText"></div>
+
+<div class="scoreboard" id="eventText"></div>
 <div class="countdown" id="countdown"></div>
 <div class="deadline" id="deadline"></div>
 </header>
@@ -180,17 +188,13 @@ onclick="setLang('ru')">
 <input type="text" id="username">
 <input type="password" id="password">
 <button onclick="login()" id="loginBtn"></button>
-<div id="error" style="margin-top:8px;color:#ff6666;"></div>
+<div id="error" style="margin-top:8px;color:#ff4444;"></div>
 </div>
 
 <div id="mainContent" style="display:none;">
 
 <div class="card">
-<h2 id="meetingTitle"></h2>
-</div>
-
-<div class="card">
-<h3 id="futureTitle"></h3>
+<h2 id="futureTitle"></h2>
 <div class="tabs" id="tabs"></div>
 <div id="tabContents"></div>
 </div>
@@ -198,7 +202,7 @@ onclick="setLang('ru')">
 </div>
 </div>
 
-<footer>© 2026 Cousinbande</footer>
+<footer>COUSINBANDE NFL EDITION</footer>
 
 <script>
 
@@ -206,75 +210,44 @@ onclick="setLang('ru')">
 let lang="de";
 
 const text={
-de:{
-login:"Login",
-username:"Benutzername",
-password:"Passwort",
-btn:"Einloggen",
-wrong:"Falsche Zugangsdaten!",
-meeting:"Letztes Treffen",
-future:"Weitere Treffen",
-next:"Nächstes Treffen:",
-remaining:"Noch",
-deadlineBefore:"Bitte spätestens 7 Tage vorher zusagen.",
-deadlineAfter:"⚠️ Zusagefrist erreicht!"
-},
-en:{
-login:"Login",
-username:"Username",
-password:"Password",
-btn:"Login",
-wrong:"Wrong credentials!",
-meeting:"Last Meeting",
-future:"Upcoming Meetings",
-next:"Next Meeting:",
-remaining:"Remaining",
-deadlineBefore:"Please confirm at least 7 days before.",
-deadlineAfter:"⚠️ Confirmation deadline reached!"
-},
-ru:{
-login:"Вход",
-username:"Имя пользователя",
-password:"Пароль",
-btn:"Войти",
-wrong:"Неверные данные!",
-meeting:"Последняя встреча",
-future:"Будущие встречи",
-next:"Следующая встреча:",
-remaining:"Осталось",
-deadlineBefore:"Подтвердите участие минимум за 7 дней.",
-deadlineAfter:"⚠️ Срок подтверждения истёк!"
-}
+de:{login:"Login",username:"Benutzername",password:"Passwort",
+btn:"Einloggen",wrong:"Falsche Zugangsdaten!",
+future:"SPIELPLAN",next:"NÄCHSTES TREFFEN:",
+remaining:"NOCH",deadlineBefore:"Zusage 7 Tage vorher!",
+deadlineAfter:"FRIST ABGELAUFEN!"},
+
+en:{login:"Login",username:"Username",password:"Password",
+btn:"Login",wrong:"Wrong credentials!",
+future:"SCHEDULE",next:"NEXT MEETING:",
+remaining:"REMAINING",deadlineBefore:"Confirm 7 days before!",
+deadlineAfter:"DEADLINE PASSED!"},
+
+ru:{login:"Вход",username:"Имя пользователя",password:"Пароль",
+btn:"Войти",wrong:"Неверные данные!",
+future:"РАСПИСАНИЕ",next:"СЛЕДУЮЩАЯ ВСТРЕЧА:",
+remaining:"ОСТАЛОСЬ",deadlineBefore:"Подтвердить за 7 дней!",
+deadlineAfter:"СРОК ИСТЁК!"}
 };
 
-function setLang(l){
-lang=l;
-applyLang();
-updateHeader();
-}
-
+function setLang(l){lang=l;applyLang();updateHeader();}
 function applyLang(){
-document.getElementById("loginTitle").innerText=text[lang].login;
-document.getElementById("username").placeholder=text[lang].username;
-document.getElementById("password").placeholder=text[lang].password;
-document.getElementById("loginBtn").innerText=text[lang].btn;
-document.getElementById("meetingTitle").innerText=text[lang].meeting;
-document.getElementById("futureTitle").innerText=text[lang].future;
+loginTitle.innerText=text[lang].login;
+username.placeholder=text[lang].username;
+password.placeholder=text[lang].password;
+loginBtn.innerText=text[lang].btn;
+futureTitle.innerText=text[lang].future;
 }
-
 applyLang();
 
-/* ===== LOGIN test/test ===== */
+/* LOGIN test/test */
 function login(){
 if(username.value==="test" && password.value==="test"){
 loginCard.style.display="none";
 mainContent.style.display="block";
-}else{
-error.innerText=text[lang].wrong;
-}
+}else error.innerText=text[lang].wrong;
 }
 
-/* ===== TERMIN-SERIE ===== */
+/* TERMIN-SERIE */
 function nthSaturday(year,month,n){
 let d=new Date(year,month,1),c=0;
 while(d.getMonth()===month){
@@ -282,7 +255,6 @@ if(d.getDay()===6){c++;if(c===n)return new Date(d.setHours(18,0,0));}
 d.setDate(d.getDate()+1);
 }
 }
-
 function nextEvents(count=6){
 let events=[],year=new Date().getFullYear();
 while(events.length<count){
@@ -293,29 +265,24 @@ year++;
 return events.filter(e=>e>new Date());
 }
 
-const events=nextEvents(6);
+const events=nextEvents();
 const nextEvent=events[0];
 const deadlineDate=new Date(nextEvent.getTime()-7*24*60*60*1000);
 
 function updateHeader(){
-document.getElementById("eventText").innerHTML=
-text[lang].next+" "+
+eventText.innerHTML=text[lang].next+" "+
 nextEvent.toLocaleDateString(
 lang==="de"?"de-DE":lang==="ru"?"ru-RU":"en-US",
 {weekday:"long",day:"numeric",month:"long",year:"numeric"});
 }
-
 updateHeader();
 
-/* ===== COUNTDOWN ===== */
 function updateCountdown(){
 let now=new Date();
 let diff=nextEvent-now;
 if(diff<=0)return;
 let days=Math.floor(diff/(1000*60*60*24));
-document.getElementById("countdown").innerHTML=
-"⏳ "+text[lang].remaining+" "+days+" d";
-
+countdown.innerHTML=text[lang].remaining+" "+days+" D";
 if(now>=deadlineDate){
 deadline.innerText=text[lang].deadlineAfter;
 deadline.classList.add("warning");
@@ -326,11 +293,8 @@ deadline.innerText=text[lang].deadlineBefore;
 setInterval(updateCountdown,1000);
 updateCountdown();
 
-/* ===== TABS ===== */
-const tabs=document.getElementById("tabs");
-const contents=document.getElementById("tabContents");
-
-events.slice(0,6).forEach((e,i)=>{
+/* TABS */
+events.forEach((e,i)=>{
 let tab=document.createElement("div");
 tab.className="tab"+(i===0?" active":"");
 tab.innerText=e.toLocaleDateString("de-DE");
@@ -339,17 +303,12 @@ tabs.appendChild(tab);
 
 let content=document.createElement("div");
 content.className="tab-content"+(i===0?" active":"");
-content.innerHTML="<p>"+e.toLocaleDateString()+"</p>";
-contents.appendChild(content);
+content.innerHTML="<h3>"+e.toLocaleDateString()+"</h3>";
+tabContents.appendChild(content);
 });
-
 function activate(i){
-document.querySelectorAll(".tab").forEach((t,idx)=>{
-t.classList.toggle("active",idx===i);
-});
-document.querySelectorAll(".tab-content").forEach((c,idx)=>{
-c.classList.toggle("active",idx===i);
-});
+document.querySelectorAll(".tab").forEach((t,idx)=>t.classList.toggle("active",idx===i));
+document.querySelectorAll(".tab-content").forEach((c,idx)=>c.classList.toggle("active",idx===i));
 }
 
 </script>
