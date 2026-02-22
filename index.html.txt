@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cousinbande</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+    font-family:'Inter',sans-serif;
+    background:radial-gradient(circle at top,#1e293b,#0f172a 70%);
+    color:#f1f5f9;
+}
+header{
+    padding:60px 20px 40px;
+    text-align:center;
+    position:relative;
+}
+header h1{
+    font-size:3.5rem;
+    font-weight:700;
+    background:linear-gradient(to right,#818cf8,#c084fc);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+.language-switch{
+    position:absolute;
+    top:20px;
+    right:20px;
+}
+.language-switch button{
+    background:rgba(255,255,255,0.1);
+    border:none;
+    padding:8px 15px;
+    border-radius:20px;
+    color:white;
+    cursor:pointer;
+}
+.badge{
+    margin-top:20px;
+    display:inline-block;
+    padding:12px 25px;
+    border-radius:50px;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(15px);
+}
+.countdown{margin-top:20px;font-weight:600;}
+.deadline{margin-top:10px;color:#fbbf24;}
+.deadline.warning{color:#ef4444;font-weight:700;}
+
+.container{
+    max-width:1000px;
+    margin:40px auto;
+    padding:0 20px;
+}
+.card{
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(25px);
+    padding:40px;
+    border-radius:25px;
+    box-shadow:0 20px 50px rgba(0,0,0,0.4);
+}
+.content-card{display:none;margin-top:40px;}
+
+input{
+    width:100%;
+    padding:12px;
+    border-radius:12px;
+    border:none;
+    margin:10px 0;
+}
+button.primary{
+    padding:10px 25px;
+    border:none;
+    border-radius:12px;
+    background:white;
+    color:#4f46e5;
+    font-weight:600;
+    cursor:pointer;
+}
+.gallery{
+    margin-top:30px;
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(200px,1fr));
+    gap:20px;
+}
+.gallery img{
+    width:100%;
+    height:200px;
+    object-fit:cover;
+    border-radius:15px;
+}
+.poll-section ul{list-style:none;padding:0;margin-bottom:15px;}
+.poll-section li{margin-bottom:8px;}
+footer{
+    text-align:center;
+    padding:40px;
+    color:#64748b;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+<div class="language-switch">
+<button onclick="toggleLanguage()">DE / RU</button>
+</div>
+<h1>Cousinbande</h1>
+<div class="badge" id="eventDate"></div>
+<div class="countdown" id="countdown"></div>
+<div class="deadline" id="deadlineNotice"></div>
+</header>
+
+<div class="container">
+
+<div class="card" id="loginCard">
+<h2 id="loginTitle">Login</h2>
+<input type="text" id="username" placeholder="Benutzername">
+<input type="password" id="password" placeholder="Passwort">
+<button class="primary" onclick="checkLogin()">Einloggen</button>
+<div id="errorMsg" style="color:#ffcccc;"></div>
+</div>
+
+<div class="card content-card" id="contentCard">
+
+<h2 id="lastMeetingTitle">Letztes Treffen</h2>
+<p>Fotos & Erinnerungen 📸</p>
+<input type="file" id="photoUpload" multiple>
+<div class="gallery" id="gallery"></div>
+
+<div class="poll-section" style="margin-top:40px;">
+<h3>Abstimmungen</h3>
+
+<p>Wo sollen wir uns treffen?</p>
+<ul>
+<li><label><input type="radio" name="restaurant"> Steakhouse by Ilvi</label></li>
+<li><label><input type="radio" name="restaurant"> Restaurant Dreigang</label></li>
+<li><label><input type="radio" name="restaurant"> Die Alte Schule</label></li>
+<li><label><input type="radio" name="restaurant"> Am Osterfeuer</label></li>
+</ul>
+
+<p>Welche Aktivität?</p>
+<ul>
+<li><label><input type="radio" name="activity"> Bowling</label></li>
+<li><label><input type="radio" name="activity"> Escape Room</label></li>
+<li><label><input type="radio" name="activity"> Spaziergang</label></li>
+<li><label><input type="radio" name="activity"> Brunch</label></li>
+</ul>
+
+<button class="primary">Abstimmen</button>
+
+</div>
+
+</div>
+</div>
+
+<footer>© 2026 Cousinbande</footer>
+
+<script>
+// ===== LOGIN (test / test) =====
+function checkLogin(){
+    const user=document.getElementById("username").value;
+    const pass=document.getElementById("password").value;
+    if(user==="test" && pass==="test"){
+        document.getElementById("loginCard").style.display="none";
+        document.getElementById("contentCard").style.display="block";
+    } else {
+        document.getElementById("errorMsg").innerText="Falsche Zugangsdaten!";
+    }
+}
+
+// ===== TERMIN-SERIE =====
+function getNthSaturday(year,month,n){
+let date=new Date(year,month,1);
+let count=0;
+while(date.getMonth()===month){
+if(date.getDay()===6){
+count++;
+if(count===n)return new Date(date.setHours(18,0,0));
+}
+date.setDate(date.getDate()+1);
+}
+}
+
+function getNextEvent(){
+const now=new Date();
+const year=now.getFullYear();
+const may=getNthSaturday(year,4,2);
+const dec=getNthSaturday(year,11,1);
+if(now<may)return may;
+if(now<dec)return dec;
+return getNthSaturday(year+1,4,2);
+}
+
+const eventDate=getNextEvent();
+const deadlineDate=new Date(eventDate.getTime()-7*24*60*60*1000);
+
+document.getElementById("eventDate").innerHTML=
+"Nächstes Treffen: "+
+eventDate.toLocaleDateString("de-DE",
+{weekday:"long",day:"numeric",month:"long",year:"numeric"});
+
+// ===== COUNTDOWN =====
+function updateCountdown(){
+const now=new Date().getTime();
+const distance=eventDate-now;
+if(distance<=0){
+document.getElementById("countdown").innerHTML="🎉";
+return;
+}
+const days=Math.floor(distance/(1000*60*60*24));
+const hours=Math.floor((distance%(1000*60*60*24))/(1000*60*60));
+document.getElementById("countdown").innerHTML=
+`⏳ Noch ${days} Tage, ${hours} Stunden`;
+if(now>=deadlineDate){
+document.getElementById("deadlineNotice").innerHTML=
+"⚠️ Zusagefrist erreicht!";
+}
+}
+setInterval(updateCountdown,1000);
+updateCountdown();
+
+// ===== BILDER =====
+document.getElementById("photoUpload")
+.addEventListener("change",function(e){
+const files=e.target.files;
+for(let i=0;i<files.length;i++){
+const reader=new FileReader();
+reader.onload=function(event){
+const img=document.createElement("img");
+img.src=event.target.result;
+document.getElementById("gallery").appendChild(img);
+};
+reader.readAsDataURL(files[i]);
+}
+});
+</script>
+
+</body>
+</html>
